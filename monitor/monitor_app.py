@@ -19,18 +19,26 @@ game_rooms = {}
 def index():
     return render_template('index.html')
 
-# given client session id
-# remove it from game rooms
-def remove_client_by_client_id(client_id):
+def remove_client_by_client_id(client_id:str):
+    """Given a client's session ID, remove it from all game rooms.
+
+    :param client_id: The ID of the client to be removed from all game rooms
+    :type client_id: str
+    """
     for game_name, clients in game_rooms.items():
         if client_id in clients:
             clients.remove(client_id)
             leave_room(game_name, client_id)
             # print(f'Client ID: {client_id} removed from Room {game_name}')
 
-# given game room name and client session id
-# join client to the corresponding game room
-def add_client_by_client_id(game_name, client_id):
+def add_client_by_client_id(game_name:str, client_id:str):
+    """Given the name of a game room and a client's session id, join client to the corresponding game room
+
+    :param game_name: The name of the game to whose room the client should be added
+    :type game_name: str
+    :param client_id: The ID of the client session to be added into the room
+    :type client_id: str
+    """
     if game_name not in game_rooms:
         game_rooms[game_name] = []
 
@@ -39,34 +47,38 @@ def add_client_by_client_id(game_name, client_id):
         join_room(game_name, client_id)
         # print(f'Client ID: {client_id} added to Room {game_name}')
 
-# when new client is "connect"
-# add its id to default game room "aqualab"
 @socketio.on('connect')
 def handle_connect():
+    """When a new client connects, add its ID to the default game room, "AQUALAB"
+    """
     client_id = request.sid
     # print(f'Client connected with ID: {client_id}')
     add_client_by_client_id("aqualab", client_id)
 
-# when current client is "disconnect"
-# remove its id from game rooms
 @socketio.on('disconnect')
 def handle_disconnect():
+    """When current client "disconnects," remove its ID from game rooms
+    """
     client_id = request.sid
     remove_client_by_client_id(client_id)
     # print(f'Client disconnected with ID: {client_id}')
 
-# when current client changes game selecor
-# remove it from current game room and join to the new assigned room
 @socketio.on('game_selector_changed')
-def handle_game_selector_changed(selectedGame):
+def handle_game_selector_changed(selectedGame:str):
+    """When current client changes game selecor, remove it from current game room and join to the newly-assigned room
+
+    :param selectedGame: The newly-selected game to which the client should be moved.
+    :type selectedGame: str
+    """
     client_id = request.sid
     remove_client_by_client_id(client_id)
     add_client_by_client_id(selectedGame, client_id)
 
-# flask-restful api receiver
-# allows data coming in through name space 'all-game'
-# send data to corresponding room
 class LoggerReceiver(Resource):
+    """flask-restful API receiver.
+    
+    Allows data coming in through name space '/log/event' to send data to corresponding room
+    """
     def post(self):
         json_data = request.get_json() or {}
         socketio.emit('logger_data', json_data, to=json_data.get('app_id'))
