@@ -6,7 +6,7 @@ on:
     - '.github/workflows/monitorAPI_CI.yml'
     - '.github/actions/**'
     - 'shared/**'
-    - 'apps/monitor/**'
+    - 'monitor/**'
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
 
 env:

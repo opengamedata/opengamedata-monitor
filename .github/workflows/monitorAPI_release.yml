@@ -7,14 +7,14 @@ on:
     paths:
     - '.github/workflows/monitorAPI_release.yml'
     - 'shared/**'
-    - 'apps/monitor/**'
+    - 'monitor/**'
 
 env:
   CI: ""
   DEPLOY_HOST: ${{ vars.OGD_MONITOR_HOST }}
   DEPLOY_DIR:  ${{ vars.WSGI_PATH }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
-  DEPLOY_URL:  ${{ vars.OGD_MONITOR_HOST }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
-  URL_PATH:    ${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
+  DEPLOY_URL:  ${{ vars.OGD_MONITOR_HOST }}
+  URL_PATH:    /
 
 jobs:
   release_deploy:
