@@ -1,3 +1,4 @@
+#!/bin/env python
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
