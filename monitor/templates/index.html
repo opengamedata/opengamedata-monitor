@@ -2,38 +2,43 @@
 <html>
 
 <head>
-    <title> Real-Time OGD</title>
+    <title>OGD Real-Time Event Monitor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+        crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
-    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
-        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"
+            integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-    <h1>Real-Time OpenGameData Visualization</h1>
+    <h1>Real-Time OpenGameData Event List</h1>
     <div class="table-container">
         <div class="selector-container">
             <form>
-                <label for="toggle">Choose a game:</label>
-                <select id="toggle" name="toggle" onchange="selectGame(this.value)">
-                    <option selected>aqualab</option>
-                    <option>icecube</option>
-                    <option>journalism</option>
-                    <option>mashopolis</option>
-                    <option>penguins</option>
-                    <option>bacteria</option>
-                    <option>balloon</option>
-                    <option>crystal</option>
-                    <option>cycle_carbon</option>
-                    <option>cycle_nitrogen</option>
-                    <option>cycle_water</option>
-                    <option>earthquake</option>
-                    <option>jowilder</option>
-                    <option>lakeland</option>
-                    <option>magnet</option>
-                    <option>waves</option>
-                    <option>wind</option>
+                <label for="select_game">Choose a game:</label>
+                <select id="select_game" name="select_game" onchange="selectGame(this.value)">
+                    <option selected>AQUALAB</option>
+                    <option>BACTERIA</option>
+                    <option>BALLOON</option>
+                    <option>CRYSTAL</option>
+                    <option>CYCLE_CARBON</option>
+                    <option>CYCLE_NITROGEN</option>
+                    <option>CYCLE_WATER</option>
+                    <option>EARTHQUAKE</option>
+                    <option>ICECUBE</option>
+                    <option>JOURNALISM</option>
+                    <option>JOWILDER</option>
+                    <option>LAKELAND</option>
+                    <option>MASHOPOLIS</option>
+                    <option>MAGNET</option>
+                    <option>PENGUINS</option>
+                    <option>THERMOVR</option>
+                    <option>TRANSFORMATION_QUEST</option>
+                    <option>WAVES</option>
+                    <option>WIND</option>
                 </select>
             </form>
         </div>
@@ -42,9 +47,9 @@
             <input type="text" id="filter" placeholder="Enter filter text" onkeyup="filterTable()">
         </div>
 
-        <div class="table-container">
-            <table id="logger-table" border="1">
-                <thead>
+        <div class="table-container table-responsive">
+            <table class="table table-striped table-hover" id="logger-table">
+                <thead class="thead-dark">
                     <tr>
                         <th>app_id</th>
                         <th>app_branch</th>
@@ -57,6 +62,7 @@
                         <th>event_data</th>
                         <th>game_state</th>
                         <th>user_data</th>
+                        <th>event_sequence_index</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +74,7 @@
 
     <script>
         // note that socket has to be variable in order to have both flask-socketio and flask-restful working
-        var socket = io.connect('http://127.0.0.1:5000');
+        var socket = io.connect('https://ogd-monitor.fielddaylab.wisc.edu');
 
         // when a client is connected, print it
         socket.on('connect', () => {
@@ -77,6 +83,7 @@
 
         // if socketio receives a new logger_data event, add a table row
         socket.on('logger_data', function (data) {
+            console.log(`Received logger_data socket request, with data ${data}`)
             addTableRow(data);
         });
 
@@ -91,7 +98,8 @@
             "event_name",
             "event_data",
             "game_state",
-            "user_data"
+            "user_data",
+            "event_sequence_index"
         ]
 
         const MAX_DATA_ROWS = 10;

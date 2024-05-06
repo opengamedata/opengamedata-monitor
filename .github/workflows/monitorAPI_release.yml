@@ -7,14 +7,15 @@ on:
     paths:
     - '.github/workflows/monitorAPI_release.yml'
     - 'shared/**'
-    - 'apps/monitor/**'
+    - 'monitor/**'
 
 env:
   CI: ""
+  LOCAL_DIR:   monitor
   DEPLOY_HOST: ${{ vars.OGD_MONITOR_HOST }}
   DEPLOY_DIR:  ${{ vars.WSGI_PATH }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
-  DEPLOY_URL:  ${{ vars.OGD_MONITOR_HOST }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
-  URL_PATH:    ${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
+  DEPLOY_URL:  ${{ vars.OGD_MONITOR_HOST }}
+  URL_PATH:    /
 
 jobs:
   release_deploy:
@@ -47,7 +48,7 @@ jobs:
       uses: burnett01/rsync-deployments@5.2
       with:
         switches: -vrc --exclude-from rsync-exclude
-        path: apps/monitor/*
+        path:        ${{ env.LOCAL_DIR }}/*
         remote_path: ${{ env.DEPLOY_DIR }}
         remote_host: ${{ env.DEPLOY_HOST }}
         remote_user: ${{ secrets.DEPLOY_USER }}
