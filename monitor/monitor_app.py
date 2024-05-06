@@ -1,6 +1,14 @@
+# global imports
+from typing import Dict
+# 3rd-party imports
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
+# ogd imports
+from ogd.core.schemas.Event import Event, EventSource
+from ogd.core.schemas.games.GameSchema import GameSchema
+from ogd.core.managers.FeatureManager import FeatureManager
+from ogd.core.managers.ExportManager import ExportManager
 
 app = Flask(__name__)
 api = Api(app)
@@ -13,6 +21,9 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 #   ...
 # }
 game_rooms = {}
+game_schema = GameSchema.FromFile(game_id="AQUALAB")
+loader = ExportManager._loadLoaderClass(game_id="AQUALAB")
+feature_manager = FeatureManager(game_schema=game_schema, LoaderClass=loader, feature_overrides=["ActiveTime"])
 
 
 @app.route('/')
@@ -68,8 +79,12 @@ def handle_game_selector_changed(selectedGame):
 # send data to corresponding room
 class LoggerReceiver(Resource):
     def post(self):
-        json_data = request.get_json() or {}
-        socketio.emit('logger_data', json_data, to=json_data.get('app_id'))
+        json_data : Dict = request.get_json() or {}
+        room = json_data.get('app_id', "APP ID NOT FOUND")
+        # TODO : replace with Event.FromJSON in future version of OGD
+        _event = Event.FromJSON(json_data)
+        feature_manager.ProcessEvent(event=_event)
+        socketio.emit('logger_data', json_data, to=room)
         return {'message': 'Received logger data successfully'}
 
 
