@@ -48,6 +48,20 @@
         </div>
 
         <div class="table-container table-responsive">
+            <table class="table table-striped table-hover" id="feature-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>player_id</th>
+                        <th>ActiveTime</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container table-responsive">
             <table class="table table-striped table-hover" id="logger-table">
                 <thead class="thead-dark">
                     <tr>
@@ -102,7 +116,13 @@
             "event_sequence_index"
         ]
 
+        const featureHeaders = [
+            "player_id",
+            "ActiveTime"
+        ]
+
         const MAX_DATA_ROWS = 10;
+        const MAX_FEATURE_ROWS = 10;
 
         // if the current row cells contain the filterText, display it in the table
         function shouldShow(cells, filterText) {
@@ -146,6 +166,28 @@
 
         }
 
+        function addFeatureRow(feature_data) {
+            // if the table row length is LARGER than MAX_DATA_ROWS, delete the last row
+            const table = document.getElementById('feature-table').getElementsByTagName('tbody')[0];
+            if (table.rows.length > MAX_FEATURE_ROWS) {
+                console.log(table.rows.length);
+                var lastIndex = table.rows.length - 1;
+                table.deleteRow(lastIndex);
+            }
+
+            // insert a new table row
+            const newRow = table.insertRow(0);
+            newRow.style.display = 'none';
+            for (const header of tableHeaders) {
+                const cell = newRow.insertCell();
+                cell.textContent = feature_data.hasOwnProperty(header) ? feature_data[header] : 'NA';
+            }
+
+            // if the table is filtering, only reserve the incoming data that can be filtered
+            // const cells = newRow.getElementsByTagName('td');
+            // const filterText = document.getElementById('filter').value.toLowerCase();
+            // if (filterText === '' || shouldShow(cells, filterText)) newRow.style.display = '';
+        }
 
         // Filter the table rows based on the filter text
         function filterTable() {
@@ -161,17 +203,26 @@
         }
 
         // clear all table rows
-        function clearTable() {
-            var table = document.getElementById('logger-table');
-            var tbody = table.querySelector('tbody');
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
+        function clearTable(logger, features) {
+            if (logger === true) {
+                var table = document.getElementById('logger-table');
+                var tbody = table.querySelector('tbody');
+                while (tbody.firstChild) {
+                    tbody.removeChild(tbody.firstChild);
+                }
+            }
+            if (features === true) {
+                var table = document.getElementById('feature-table');
+                var tbody = table.querySelector('tbody');
+                while (tbody.firstChild) {
+                    tbody.removeChild(tbody.firstChild);
+                }
             }
         }
 
         // after the selector changes to a new game
         function selectGame(selectedGame) {
-            clearTable();
+            clearTable(true, true);
             socket.emit("game_selector_changed", selectedGame);
         }
 

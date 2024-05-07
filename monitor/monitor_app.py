@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
 # ogd imports
-from ogd.core.schemas.Event import Event, EventSource
+from ogd.core.schemas.Event import Event
 from ogd.core.schemas.games.GameSchema import GameSchema
 from ogd.core.managers.FeatureManager import FeatureManager
 from ogd.core.managers.ExportManager import ExportManager
@@ -94,11 +94,10 @@ class LoggerReceiver(Resource):
     def post(self):
         json_data : Dict = request.get_json() or {}
         # print(f"Received LoggerReceiver request, with data {json_data}")
-        room = json_data.get('app_id', "APP ID NOT FOUND")
-        # TODO : replace with Event.FromJSON in future version of OGD
+        _room = json_data.get('app_id', "APP ID NOT FOUND")
         _event = Event.FromJSON(json_data)
         feature_manager.ProcessEvent(event=_event)
-        socketio.emit('logger_data', json_data, to=room)
+        socketio.emit('logger_data', json_data, to=_room)
         return {'message': 'Received logger data successfully'}
 
 
