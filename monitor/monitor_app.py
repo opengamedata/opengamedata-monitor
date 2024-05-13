@@ -92,14 +92,17 @@ class LoggerReceiver(Resource):
     Allows data coming in through name space '/log/event' to send data to corresponding room
     """
     def post(self):
-        json_data : Dict = request.get_json() or {}
+    # 1. Get event data, and send.
+        event_data : Dict = request.get_json() or {}
         # print(f"Received LoggerReceiver request, with data {json_data}")
-        _room = json_data.get('app_id', "APP ID NOT FOUND")
-        _event = Event.FromJSON(json_data)
+        _room = event_data.get('app_id', "APP ID NOT FOUND")
+        socketio.emit('logger_data', event_data, to=_room)
+    # 2. Get updated feature data from events, and send.
+        _event = Event.FromJSON(event_data)
         feature_manager.ProcessEvent(event=_event)
         feature_data = feature_manager.GetFeatureValues()
-        socketio.emit('logger_data', json_data, to=_room)
         socketio.emit('feature_data', feature_data, to=_room)
+    # 3. Wrap up
         return {'message': 'Received logger data successfully'}
 
 
