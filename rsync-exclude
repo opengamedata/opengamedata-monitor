@@ -1,0 +1,17 @@
+.DS_Store
+.gitignore
+.gitmodules
+.git
+node_modules
+deploy.rb
+Gruntfile.coffee
+Gulpfile.js
+package.json
+.sass-cache
+Makefile
+README.md
+.sublime-grunt.cache
+coffee_out.js
+browserify_out.js
+minify_out.js.report.txt
+rsync-exclude
