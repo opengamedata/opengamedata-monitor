@@ -97,7 +97,9 @@ class LoggerReceiver(Resource):
         _room = json_data.get('app_id', "APP ID NOT FOUND")
         _event = Event.FromJSON(json_data)
         feature_manager.ProcessEvent(event=_event)
+        feature_data = feature_manager.GetFeatureValues()
         socketio.emit('logger_data', json_data, to=_room)
+        socketio.emit('feature_data', feature_data, to=_room)
         return {'message': 'Received logger data successfully'}
 
 
