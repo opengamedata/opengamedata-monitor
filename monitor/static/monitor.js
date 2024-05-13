@@ -1,3 +1,4 @@
+// Included from monitor.js
 // note that socket has to be variable in order to have both flask-socketio and flask-restful working
 var socket = io.connect('https://ogd-monitor.fielddaylab.wisc.edu');
 
