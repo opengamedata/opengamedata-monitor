@@ -9,9 +9,13 @@ socket.on('connect', () => {
 
 // if socketio receives a new logger_data event, add a table row
 socket.on('logger_data', function (data) {
-   console.log(`Received logger_data socket request, with data ${data}`)
+   console.debug(`Received logger_data socket request, with data ${JSON.stringify(data)}`)
    addTableRow(data);
 });
+
+socket.on('feature_data', function(data) {
+   console.log(`Received feature_data socket request, with data ${JSON.stringify(data)}`)
+})
 
 const tableHeaders = [
    "app_id",
