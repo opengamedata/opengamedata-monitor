@@ -101,7 +101,7 @@ class LoggerReceiver(Resource):
         _event = Event.FromJSON(event_data)
         feature_manager.ProcessEvent(event=_event)
         feature_data = feature_manager.GetFeatureValues()
-        # socketio.emit('feature_data', feature_data, to=_room)
+        socketio.emit('feature_data', feature_data, to=_room)
     # 3. Wrap up
         return {'message': 'Received logger data successfully'}
 
