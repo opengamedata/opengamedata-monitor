@@ -7,9 +7,9 @@ from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
 # ogd imports
 from ogd.core.schemas.Event import Event
-# from ogd.core.schemas.games.GameSchema import GameSchema
-# from ogd.core.managers.FeatureManager import FeatureManager
-# from ogd.core.managers.ExportManager import ExportManager
+from ogd.core.schemas.games.GameSchema import GameSchema
+from ogd.core.managers.FeatureManager import FeatureManager
+from ogd.core.managers.ExportManager import ExportManager
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,9 +22,9 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 #   ...
 # }
 game_rooms = {}
-# game_schema = GameSchema.FromFile(game_id="AQUALAB")
-# loader = ExportManager._loadLoaderClass(game_id="AQUALAB")
-# feature_manager = FeatureManager(game_schema=game_schema, LoaderClass=loader, feature_overrides=["ActiveTime"])
+game_schema = GameSchema.FromFile(game_id="AQUALAB")
+loader = ExportManager._loadLoaderClass(game_id="AQUALAB")
+feature_manager = FeatureManager(game_schema=game_schema, LoaderClass=loader, feature_overrides=["ActiveTime"])
 
 
 @app.route('/')
@@ -99,8 +99,8 @@ class LoggerReceiver(Resource):
         socketio.emit('logger_data', event_data, to=_room)
     # 2. Get updated feature data from events, and send.
         _event = Event.FromJSON(event_data)
-        # feature_manager.ProcessEvent(event=_event)
-        # feature_data = feature_manager.GetFeatureValues()
+        feature_manager.ProcessEvent(event=_event)
+        feature_data = feature_manager.GetFeatureValues()
         # socketio.emit('feature_data', feature_data, to=_room)
     # 3. Wrap up
         return {'message': 'Received logger data successfully'}
