@@ -48,20 +48,6 @@
         </div>
 
         <div class="table-container table-responsive">
-            <table class="table table-striped table-hover" id="feature-table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>player_id</th>
-                        <th>ActiveTime</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="table-container table-responsive">
             <table class="table table-striped table-hover" id="logger-table">
                 <thead class="thead-dark">
                     <tr>
@@ -80,14 +66,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Event data will be inserted here -->
+                </tbody>
+            </table>
 
+        <div class="table-container table-responsive">
+            <table class="table table-striped table-hover" id="feature-table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>player_id</th>
+                        <th>ActiveTime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Feature data will be inserted here -->
                 </tbody>
             </table>
         </div>
+        </div>
     </div>
 
-    <!-- <script src="{{ url_for('static',filename='monitor.js') }}"></script> -->
-    <script>
+    <script src="{{ url_for('static',filename='monitor.js') }}"></script>
+    <!-- <script>
         // note that socket has to be variable in order to have both flask-socketio and flask-restful working
         var socket = io.connect('https://ogd-monitor.fielddaylab.wisc.edu');
 
@@ -226,7 +226,7 @@
         clearTable(true, true);
         socket.emit("game_selector_changed", selectedGame);
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
