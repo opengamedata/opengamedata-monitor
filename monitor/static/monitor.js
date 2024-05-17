@@ -59,7 +59,7 @@ function addTableRow(data) {
    // if the table row length is LARGER than MAX_DATA_ROWS, delete the last row
    const table = document.getElementById('logger-table').getElementsByTagName('tbody')[0];
    if (table.rows.length > MAX_DATA_ROWS) {
-         console.log(table.rows.length);
+         // console.log(table.rows.length);
          var lastIndex = table.rows.length - 1;
          table.deleteRow(lastIndex);
    }
@@ -86,7 +86,7 @@ function addFeatureRow(feature_data) {
    // if the table row length is LARGER than MAX_DATA_ROWS, delete the last row
    const table = document.getElementById('feature-table').getElementsByTagName('tbody')[0];
    if (table.rows.length > MAX_FEATURE_ROWS) {
-         console.log(table.rows.length);
+         console.log(`${table.rows.length} rows in feature table`);
          var lastIndex = table.rows.length - 1;
          table.deleteRow(lastIndex);
    }
