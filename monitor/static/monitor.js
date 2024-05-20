@@ -14,8 +14,8 @@ socket.on('logger_data', function (data) {
 });
 
 socket.on('feature_data', function(data) {
-   console.log(`Received feature_data socket request, with data ${JSON.stringify(data)}`)
-})
+   console.info(`Received feature_data socket request, with data ${JSON.stringify(data)}`)
+});
 
 const tableHeaders = [
    "app_id",
