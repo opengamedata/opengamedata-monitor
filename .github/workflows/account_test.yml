@@ -26,7 +26,7 @@ jobs:
         chmod 600 ./key.txt
 
   test_status_strict:
-    name: Status Test w/Strict Checking of Monitor API
+    name: Status Test w/Strict Checking of apache
     runs-on: ubuntu-22.04
     steps:
     - name: Connect VPN
@@ -34,6 +34,49 @@ jobs:
     - name: Get system status
       run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
   test_status_strict_self:
+    name: Status Test Self w/Strict Checking of apache
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status using own ID
+      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
+
+  test_status_bare:
+    name: Status Test of apache
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "systemctl status apache2"
+
+  test_status_normal:
+    name: Status Test of apache
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
+  test_status_normal_self:
+    name: Status Test Self of apache
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status using own ID
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
+
+  test_api_status_strict:
+    name: Status Test w/Strict Checking of Monitor API
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status
+      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
+  test_api_status_strict_self:
     name: Status Test Self w/Strict Checking of Monitor API
     runs-on: ubuntu-22.04
     steps:
@@ -42,19 +85,28 @@ jobs:
     - name: Get system status using own ID
       run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
 
-  test_status_normal:
+  test_api_status_bare:
     name: Status Test of Monitor API
     runs-on: ubuntu-22.04
     steps:
     - name: Connect VPN
       run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
     - name: Get system status
-      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
-  test_status_normal_self:
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "systemctl status monitor-api"
+
+  test_api_status_normal:
+    name: Status Test of Monitor API
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status monitor-api"
+  test_api_status_normal_self:
     name: Status Test Self of Monitor API
     runs-on: ubuntu-22.04
     steps:
     - name: Connect VPN
       run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
     - name: Get system status using own ID
-      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status monitor-api"
