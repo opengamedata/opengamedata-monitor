@@ -9,7 +9,7 @@ env:
 
 jobs:
   release_deploy:
-    name: Release Deploy of Monitor API
+    name: Account Test of Monitor API
     runs-on: ubuntu-22.04
     steps:
 
@@ -31,6 +31,6 @@ jobs:
 
   # 4. Cleanup & complete
     - name: Get system status
-      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
     - name: Get system status using own ID
-      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
