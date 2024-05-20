@@ -1,0 +1,36 @@
+# Workflow to build and deploy designer dashboard to server.
+name: OpenGameData Account Test
+on:
+  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+
+env:
+  CI: ""
+  DEPLOY_HOST: ${{ vars.OGD_MONITOR_HOST }}
+
+jobs:
+  release_deploy:
+    name: Release Deploy of Monitor API
+    runs-on: ubuntu-22.04
+    steps:
+
+  # 1. Local checkout & config
+
+  # 2. Build 
+
+  # 3. Remote config & deploy
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+
+  # 4. Cleanup & complete
+    - name: Get system status
+      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
+    - name: Get system status using own ID
+      run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status apache2"
