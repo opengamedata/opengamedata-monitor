@@ -13,7 +13,7 @@ jobs:
     name: Status Test w/Strict Checking of apache
     concurrency:
       group: status-strict
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -31,7 +31,7 @@ jobs:
     name: Status Test Self w/Strict Checking of apache
     concurrency:
       group: status-strict
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -50,7 +50,7 @@ jobs:
     name: Bare Status Test of apache
     concurrency:
       group: status-bare
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -69,7 +69,7 @@ jobs:
     name: Status Test of apache
     concurrency:
       group: status-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -87,7 +87,7 @@ jobs:
     name: Status Test Self of apache
     concurrency:
       group: status-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -106,7 +106,7 @@ jobs:
     name: Restart Test of apache
     concurrency:
       group: restart-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -124,7 +124,7 @@ jobs:
     name: Restart Test Self of apache
     concurrency:
       group: restart-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -143,7 +143,7 @@ jobs:
     name: Bare Status Test of Monitor API
     concurrency:
       group: api-status-bare
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -162,7 +162,7 @@ jobs:
     name: Status Test of Monitor API
     concurrency:
       group: api-status-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -180,7 +180,7 @@ jobs:
     name: Status Test Self of Monitor API
     concurrency:
       group: api-status-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -199,7 +199,7 @@ jobs:
     name: Restart Test of Monitor API
     concurrency:
       group: api-restart-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -217,7 +217,7 @@ jobs:
     name: Restart Test Self of Monitor API
     concurrency:
       group: api-restart-normal
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
