@@ -11,6 +11,9 @@ jobs:
 
   test_status_strict:
     name: Status Test w/Strict Checking of apache
+    concurrency:
+      group: status-strict
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -26,6 +29,9 @@ jobs:
       run: ssh -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
   test_status_strict_self:
     name: Status Test Self w/Strict Checking of apache
+    concurrency:
+      group: status-strict
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -42,6 +48,9 @@ jobs:
 
   test_status_bare:
     name: Bare Status Test of apache
+    concurrency:
+      group: status-bare
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -58,6 +67,9 @@ jobs:
 
   test_status_normal:
     name: Status Test of apache
+    concurrency:
+      group: status-normal
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -73,6 +85,9 @@ jobs:
       run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status apache2"
   test_status_normal_self:
     name: Status Test Self of apache
+    concurrency:
+      group: status-normal
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -89,6 +104,9 @@ jobs:
 
   test_reset_normal:
     name: Restart Test of apache
+    concurrency:
+      group: restart-normal
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -104,6 +122,9 @@ jobs:
       run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl restart apache2"
   test_restart_normal_self:
     name: Restart Test Self of apache
+    concurrency:
+      group: restart-normal
+      cancel-in-progress: true
     runs-on: ubuntu-22.04
     steps:
     - name: Get OpenConnect installed
@@ -118,49 +139,95 @@ jobs:
     - name: Get system status using own ID
       run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl restart apache2"
 
-  # test_api_status_bare:
-  #   name: Bare Status Test of Monitor API
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #   - name: Get OpenConnect installed
-  #     run: sudo apt-get -q update && sudo apt-get -q install openconnect
-  #   - name: Connect VPN
-  #     run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
-  #   - name: Setup Access Key
-  #     run: |
-  #       mkdir -p ~/.ssh
-  #       echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
-  #       chmod 600 ./key.txt
-  #   - name: Get system status
-  #     run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "systemctl status monitor-api"
+  test_api_status_bare:
+    name: Bare Status Test of Monitor API
+    concurrency:
+      group: api-status-bare
+      cancel-in-progress: true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "systemctl status monitor-api"
 
-  # test_api_status_normal:
-  #   name: Status Test of Monitor API
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #   - name: Get OpenConnect installed
-  #     run: sudo apt-get -q update && sudo apt-get -q install openconnect
-  #   - name: Connect VPN
-  #     run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
-  #   - name: Setup Access Key
-  #     run: |
-  #       mkdir -p ~/.ssh
-  #       echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
-  #       chmod 600 ./key.txt
-  #   - name: Get system status
-  #     run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status monitor-api"
-  # test_api_status_normal_self:
-  #   name: Status Test Self of Monitor API
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #   - name: Get OpenConnect installed
-  #     run: sudo apt-get -q update && sudo apt-get -q install openconnect
-  #   - name: Connect VPN
-  #     run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
-  #   - name: Setup Access Key
-  #     run: |
-  #       mkdir -p ~/.ssh
-  #       echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
-  #       chmod 600 ./key.txt
-  #   - name: Get system status using own ID
-  #     run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status monitor-api"
+  test_api_status_normal:
+    name: Status Test of Monitor API
+    concurrency:
+      group: api-status-normal
+      cancel-in-progress: true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl status monitor-api"
+  test_api_status_normal_self:
+    name: Status Test Self of Monitor API
+    concurrency:
+      group: api-status-normal
+      cancel-in-progress: true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+    - name: Get system status using own ID
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl status monitor-api"
+
+  test_api_restart_normal:
+    name: Restart Test of Monitor API
+    concurrency:
+      group: api-restart-normal
+      cancel-in-progress: true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+    - name: Get system status
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo systemctl restart monitor-api"
+  test_api_restart_normal_self:
+    name: Restart Test Self of Monitor API
+    concurrency:
+      group: api-restart-normal
+      cancel-in-progress: true
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Get OpenConnect installed
+      run: sudo apt-get -q update && sudo apt-get -q install openconnect
+    - name: Connect VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup Access Key
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+    - name: Get system status using own ID
+      run: ssh -o StrictHostKeyChecking=no -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "sudo -u ${{ secrets.DEPLOY_USER }} systemctl restart monitor-api"
