@@ -5,7 +5,7 @@ on:
 
 env:
   CI: ""
-  DEPLOY_HOST: ${{ vars.OGD_SERVICES_HOST }}
+  DEPLOY_HOST: ${{ vars.OGD_STAGING_HOST }}
 
 jobs:
 
