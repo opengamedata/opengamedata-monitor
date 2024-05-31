@@ -21,6 +21,10 @@ jobs:
   release_deploy:
     name: Release Deploy of Monitor API
     runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.repository }}-${{ github.ref }}-${{ github.workflow }}
+      cancel-in-progress: true
+
     steps:
 
   # 1. Local checkout & config

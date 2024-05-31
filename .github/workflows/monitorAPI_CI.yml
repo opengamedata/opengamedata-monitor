@@ -22,7 +22,7 @@ jobs:
     name: CI Deploy of Monitor API
     runs-on: ubuntu-22.04
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.repository }}-${{ github.ref }}-${{ github.workflow }}
       cancel-in-progress: true
 
     steps:
