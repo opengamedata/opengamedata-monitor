@@ -106,8 +106,6 @@ class LoggerReceiver(Resource):
             feature_manager.ProcessEvent(event=_event)
             feature_data = feature_manager.GetFeatureValues()
             socketio.emit('feature_data', {"features" : feature_data}, to=_room)
-        finally:
-            socketio.emit('feature_data', {"Foo":"Dummy message to see if it goes through"}, to=_room)
     # 3. Wrap up
         return {'message': 'Received logger data successfully'}
 
