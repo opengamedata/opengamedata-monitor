@@ -6,7 +6,6 @@ on:
     branches: [ production ]
     paths:
     - '.github/workflows/monitorAPI_release.yml'
-    - 'shared/**'
     - 'monitor/**'
 
 env:
