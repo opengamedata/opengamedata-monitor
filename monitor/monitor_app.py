@@ -6,7 +6,7 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
 # ogd imports
-from ogd.core.schemas.Event import Event
+from ogd.core.models.Event import Event
 from ogd.core.schemas.games.GameSchema import GameSchema
 from ogd.core.managers.FeatureManager import FeatureManager
 from ogd.core.managers.ExportManager import ExportManager
@@ -97,10 +97,9 @@ class LoggerReceiver(Resource):
         # print(f"Received LoggerReceiver request, with data {json_data}")
         _room = event_data.get('app_id', "APP ID NOT FOUND")
         socketio.emit('logger_data', event_data, to=_room)
-        socketio.emit('logger_data', {"Foo":"Dummy message to see if it goes through"}, to=_room)
-        socketio.emit('feature_data', {"Foo":"Dummy message to see if it goes through"}, to=_room)
     # 2. Get updated feature data from events, and send.
         _event = Event.FromJSON(event_data)
+        socketio.emit('feature_data', {"Foo":"Dummy message to see if it goes through"}, to=_room)
         feature_manager.ProcessEvent(event=_event)
         feature_data = feature_manager.GetFeatureValues()
         socketio.emit('feature_data', {"features" : feature_data}, to=_room)
