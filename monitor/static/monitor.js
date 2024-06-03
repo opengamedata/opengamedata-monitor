@@ -9,7 +9,7 @@ socket.on('connect', () => {
 
 // if socketio receives a new logger_data event, add a table row
 socket.on('logger_data', function (data) {
-   console.debug(`Received logger_data socket request, with data ${JSON.stringify(data)}`)
+   // console.debug(`Received logger_data socket request, with data ${JSON.stringify(data)}`)
    if (!data.hasOwnProperty("Foo")) {
       addTableRow(data);
    }
