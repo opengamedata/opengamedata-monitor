@@ -101,7 +101,7 @@ class LoggerReceiver(Resource):
         try:
             _event = Event.FromJSON(event_data)
         except Exception as err:
-            socketio.emit('feature_data', {"Error":f"Got a parse error when extracting an Event from {event_data}: {err}"}, to=_room)
+            socketio.emit('feature_data', {"Error":f"Got a parse error when extracting an Event from {event_data} : {type(err)} : {err}"}, to=_room)
         else:
             feature_manager.ProcessEvent(event=_event)
             feature_data = feature_manager.GetFeatureValues()
