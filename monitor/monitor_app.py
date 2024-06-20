@@ -98,11 +98,14 @@ class LoggerReceiver(Resource):
         _room = event_data.get('app_id', "APP ID NOT FOUND")
         socketio.emit('logger_data', event_data, to=_room)
     # 2. Get updated feature data from events, and send.
-        _event = Event.FromJSON(event_data)
-        socketio.emit('feature_data', {"Foo":"Dummy message to see if it goes through"}, to=_room)
-        feature_manager.ProcessEvent(event=_event)
-        feature_data = feature_manager.GetFeatureValues()
-        socketio.emit('feature_data', {"features" : feature_data}, to=_room)
+        try:
+            _event = Event.FromJSON(event_data)
+        except Exception as err:
+            socketio.emit('feature_data', {"Error":f"Got a parse error when extracting an Event from {event_data}: {err}"}, to=_room)
+        else:
+            feature_manager.ProcessEvent(event=_event)
+            feature_data = feature_manager.GetFeatureValues()
+            socketio.emit('feature_data', {"features" : feature_data}, to=_room)
     # 3. Wrap up
         return {'message': 'Received logger data successfully'}
 
