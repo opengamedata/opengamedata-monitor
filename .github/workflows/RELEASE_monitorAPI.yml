@@ -1,5 +1,6 @@
 # Workflow to build and deploy designer dashboard to server.
-name: OpenGameData Event Monitor API Release
+name: Release Script - Monitor API
+run-name: ${{ format('{0} - {1}', github.workflow, github.event_name == 'release' && github.ref || 'Manual Run') }}
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
   push: # Trigger automatically when we do a merge to production
