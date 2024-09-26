@@ -10,7 +10,7 @@ on:
 
 env:
   CI: ""
-  LOCAL_DIR:   monitor
+  LOCAL_DIR:   src
   DEPLOY_HOST: ${{ vars.OGD_STAGING_HOST }}
   DEPLOY_DIR:  ${{ vars.WSGI_PATH }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
   DEPLOY_URL:  ${{ vars.OGD_STAGING_HOST }}/${{ github.event.repository.name }}/${{ github.ref_name }}/monitor
@@ -50,7 +50,7 @@ jobs:
       run: ssh -o StrictHostKeyChecking=no -T -i ./key.txt ${{ secrets.DEPLOY_USER }}@${{ env.DEPLOY_HOST }} "mkdir -p ${{ env.DEPLOY_DIR }}"
 
     - name: Upload *App* to web server via rsync
-      uses: burnett01/rsync-deployments@5.2
+      uses: burnett01/rsync-deployments@7.0.1
       with:
         # switches:
         # -v : verbose output
