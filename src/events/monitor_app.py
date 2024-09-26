@@ -6,8 +6,8 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
 from flask_restful import Api, Resource
 # ogd imports
-from ogd.core.models.Event import Event
-from ogd.core.schemas.games.GameSchema import GameSchema
+from ogd.common.models.Event import Event
+from ogd.common.schemas.games.GameSchema import GameSchema
 from ogd.core.managers.FeatureManager import FeatureManager
 from ogd.core.managers.ExportManager import ExportManager
 
